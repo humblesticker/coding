@@ -25,8 +25,8 @@ public class Minesweeper {
 		for(int i=0; i<field.length; i++) {
 			StringBuilder b = new StringBuilder();
 			for(int j=0; j<field[i].length(); j++) {
-				if(field[i].charAt(j) == '*') continue;
-				b.append(count(i, j, field));
+				if(field[i].charAt(j) == '*') b.append('*');
+				else b.append(count(i, j, field));
 			}
 
 			out[i] = b.toString();
@@ -35,7 +35,9 @@ public class Minesweeper {
 	}
 
 	public static void print(String[] field, int number) {
-		System.out.println("field #" + number + ":");
+		if(number > 1) System.out.println();
+		System.out.println("Field #" + number + ":");
+		for(String s : field) System.out.println(s);
 	}
 
 	public static void main(String[] args) {
