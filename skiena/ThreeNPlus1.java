@@ -5,17 +5,19 @@
 import java.util.*;
 
 public class ThreeNPlus1 {
-	private Map<Integer, Integer> cache = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> cache = null;
+	public ThreeNPlus1(Map<Integer, Integer> c) { cache = c; }
 
 	private int count(int n) {
 		List<Integer> list = new ArrayList<Integer>();
-		int count = 1;
-		while(n != 1) {
+		int count = 0;
+		while(n >= 1) {
 			list.add(n);
 			if(cache.containsKey(n)) { count += cache.get(n); break; }
+			else count++;
+
 			if(n%2 == 0) n /= 2;
 			else n = 3*n + 1;
-			count++;
 		}
 
 		// update cache
@@ -36,9 +38,12 @@ public class ThreeNPlus1 {
 
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
-		while(s.hasNextLine()) {
+		Map<Integer, Integer> cache = new HashMap<Integer, Integer>();
+		cache.put(1, 1);
+
+		while(s.hasNextInt()) {
 			int i = s.nextInt(), j = s.nextInt();
-			System.out.println(i + " " + j + " " + (new ThreeNPlus1()).max(i, j));
+			System.out.println(i + " " + j + " " + (new ThreeNPlus1(cache)).max(i, j));
 		}
 	}
 }
