@@ -16,9 +16,23 @@ public class CryptKicker {
 		if(word.length() != enc.length()) return null;
 		char[] updated = Arrays.copyOf(map, map.length);
 		for(int i=0; i<word.length(); i++) 
-			if(consistent(word.charAt(i), enc.charAt(i), map)) updated[word.charAt(i)-'a'] = enc.charAt(i);
+			if(consistent(word.charAt(i), enc.charAt(i), updated)) updated[word.charAt(i)-'a'] = enc.charAt(i);
 			else return null;
 		return updated;
+	}
+
+	private static char[] decrypt(int level, char[] map, String[] encrypted, String[] words) {
+		String enc = encrypted[level];
+		for(int i=0; i<words.length; i++) {
+			char[] updated = consistent(words[i], enc, map);
+			if(updated != null) {
+				//System.out.println(level + "," + i + "," + Arrays.toString(updated));
+				if(level+1 >= encrypted.length) return updated;
+				updated = decrypt(level+1, updated, encrypted, words);
+				if(updated != null) return updated;
+			}
+		}
+		return null;
 	}
 
 	private static String decode(String line, char[] map) {	
@@ -33,19 +47,6 @@ public class CryptKicker {
 			else b.append(reverse[c-'a']);
 		}
 		return b.toString();
-	}
-
-	private static char[] decrypt(int level, char[] map, String[] encrypted, String[] words) {
-		String enc = encrypted[level];
-		for(int i=0; i<words.length; i++) {
-			char[] updated = consistent(words[i], enc, map);
-			if(updated != null) {
-				if(level+1 >= encrypted.length) return updated;
-				updated = decrypt(level+1, updated, encrypted, words);
-				if(updated != null) return updated;
-			}
-		}
-		return null;
 	}
 
 	public static void main(String[] args) {
