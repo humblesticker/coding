@@ -1,49 +1,33 @@
 import java.util.*;
 
 public class GeneralChess {
-	private class Point implements Comparable<Point> {
-		int x; int y;
-		public Point(String s) {
-			String[] split = s.split(",");
-			x = Integer.parseInt(split[0]); y = Integer.parseInt(split[1]);
-		}
-		public Point(int x, int y) { this.x = x; this.y = y; }	
-		public int compareTo(Point other) {
-			if(x == other.x) return Integer.compare(y, other.y);
-			return Integer.compare(x, other.x);
-		}
-		
-		public boolean equals(Object obj) {
-        	if(!(obj instanceof Point)) return false;
-      		Point other = (Point)obj;
-      		return x == other.x && y == other.y;	 
-    	}
-		public int hashCode() { return x*100000 + y; }
-		public String toString() { return x + "," + y; }
+	String toString(int x, int y) { return x + "," + y; }
 
-		Set<Point> get() {
-			Set<Point> points = new HashSet<Point>();
-			points.add(new Point(x + 2, y + 1));
-			points.add(new Point(x + 2, y - 1));
-			points.add(new Point(x + 1, y + 2));
-			points.add(new Point(x + 1, y - 2));
-			points.add(new Point(x - 2, y + 1));
-			points.add(new Point(x - 2, y - 1));
-			points.add(new Point(x - 1, y + 2));
-			points.add(new Point(x - 1, y - 2));
-			return points;
-		}
+	List<String> get(String s) {
+		String[] split = s.split(",");
+		int x = Integer.parseInt(split[0]), y = Integer.parseInt(split[1]);
+
+		List<String> points = new ArrayList<String>();
+		points.add(toString(x - 2, y - 1));
+		points.add(toString(x - 2, y + 1));
+		points.add(toString(x - 1, y - 2));
+		points.add(toString(x - 1, y + 2));
+		points.add(toString(x + 1, y - 2));
+		points.add(toString(x + 1, y + 2));
+		points.add(toString(x + 2, y - 1));
+		points.add(toString(x + 2, y + 1));
+		return points;
+	}
+
+	private List<String> intersect(List<String> set1, List<String> set2) {
+		List<String> common = new ArrayList<String>();
+		for(String s1 : set1) for(String s2: set2) if(s1.equals(s2)) { common.add(s1); break; }
+		return common;
 	}
 
 	public String[] attackPositions(String[] pieces) {
-		Set<Point> points = (new Point(pieces[0])).get();
-		for(int i=1; i<pieces.length; i++) points.retainAll((new Point(pieces[i])).get());
-		
-		Point[] arr = points.toArray(new Point[points.size()]);
-		Arrays.sort(arr);
-
-		String[] out = new String[arr.length];
-		for(int i=0; i<arr.length; i++) out[i] = arr[i].toString();
-		return out;
+		List<String> points = get(pieces[0]);
+		for(int i=1; i<pieces.length; i++) points = intersect(points, get(pieces[i]));
+		return points.toArray(new String[points.size()]);
 	}
 }
