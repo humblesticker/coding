@@ -1,31 +1,15 @@
 2
 
-8 11
-abcDEFGhigg
-hEbkWalDork
-FtyAwaldORm
-FtsimrLqsrc
-byoArBeDeyv
-Klcbqwikomk
-strEBGadhrb
-yUiqlxcnBjf
-4
-Waldorf
-Bambi
-Betty
-Dagbert
+011
+0111
+01110
+111
+0111
+10111
 
-8 11
-abcDEFGhigg
-hEbkWalDork
-FtyAwaldORm
-FtsimrLqsrc
-byoArBeDeyv
-Klcbqwikomk
-strEBGadhrb
-yUiqlxcnBjf
-4
-Waldorf
-Bambi
-Betty
-Dagbert
+011
+0111
+01110
+111
+0111
+10111
