@@ -3,38 +3,44 @@ import java.util.*;
 public class FileFragmentation {
 	private static int getLength(List<String> fragments) {
 		if(fragments.size() == 0) return 0;
-		int total = 0;
-		for(String s : fragments) total += s.length();
+		int total = 0; for(String s : fragments) total += s.length();
 		return 2*total/fragments.size();
 	}
 
-	/*
-		find fragments with same length with diff
+	private static Map<Integer, Set<String>> buildMap(List<String> list) {
+		Map<Integer, Set<String>> map = new HashMap<Integer, Set<String>>();
+		for(String s : list) {
+			int len = s.length(); if(!map.containsKey(len)) map.put(len, new HashSet<String>());
+			map.get(len).add(s);
+		}
+		return map;
+	}
 
-		get match with same pattern -- 8 possibilities
+	private static Set<String> getCombs(Set<String> left, Set<String> right) {
+		Set<String> set = new HashSet<String>();
+		for(String l : left) for(String r : right) set.add(l + r);
+		for(String r : right) for(String l : left) set.add(r + l);
+		return set;
+	}
 
-		if no such fragments
+	private static Map<Integer, Set<String>> getCombsMap(Map<Integer, Set<String>> map, int length) {
+		Map<Integer, Set<String>> combsMap = new HashMap<Integer, Set<String>>();
+		for(int i=1; i<=length/2; i++) 
+			if(map.containsKey(i)) combsMap.put(i, getCombs(map.get(i), map.get(length-i)));
+		return combsMap;
+	}
 
-		3, 5 or 5, 3
-		compare with 2, 6 or 6, 2
-
-	*/
-	private static boolean check(String s, List<String> fragments) {
-		return false;
-	} 
+	private static boolean check(String comb, Map<Integer, Set<String>> map) {
+		for (Set<String> set : map.values()) if(!set.contains(comb)) return false;
+		return true;
+	}
 
 	private static String process(List<String> fragments) {
-		int length = getLength(fragments);
-		if(length == 0) return "";
+		int length = getLength(fragments); if(length == 0) return "";
+		Map<Integer, Set<String>> map = getCombsMap(buildMap(fragments), length);
 
-		String item = fragments.get(0), other = null; 
-		for(int i=1; i<fragments.size(); i++) 
-			if(fragments.get(i).length() == length - item.length()) { 
-				other = fragments.get(i); break; 
-			}
-		if(other == null) return "";
-
-		// check
+		Set<String> set = map.entrySet().iterator().next().getValue();
+		for(String comb : set) if(check(comb, map)) return comb;
 		return "";
 	}
 
