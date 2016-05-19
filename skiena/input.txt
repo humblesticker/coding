@@ -1,13 +1,10 @@
-2
+booster
+rooster
+roaster
+coasted
+roasted
+coastal
+postal
 
-011
-0111
-01110
-111
-0111
-10111
-
-011
-0111
-01111
-1011
+booster roasted
+coastal postal
