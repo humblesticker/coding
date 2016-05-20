@@ -35,7 +35,7 @@ public class Doublets {
 			map.put(i, list);
 		}
 		return map;
-	}
+	}	
 
 	private static int find(String s, List<String> list) {
 		for(int i=0; i<list.size(); i++) if(s.equals(list.get(i))) return i;
