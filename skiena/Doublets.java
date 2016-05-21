@@ -1,22 +1,36 @@
 import java.util.*;
 
 public class Doublets {
-	int min = Integer.MAX_VALUE; 
-	List<Integer> minPath = null;
+	static class Node implements Comparable<Node> {
+		int id;
+		String word; 
+		int from = -1; 
+		int distance = Integer.MAX_VALUE; 
+		boolean visited = false;
+		List<Integer> list = null;
 
-	// map is sorted doublets for each dict
-	private void getmin(int src, int dest, Map<Integer, List<Integer>> map, List<Integer> path) {
-		if(src == dest) { 
-			path.add(dest); 
-			if(path.size() < min) { min = path.size(); minPath = path; }
-			return;
-		}
+		Node(int i, String w, List<Integer> l) { id = i; word = w; list = l; }
+		public int compareTo(Node other) { return Integer.compare(distance, other.distance); }
+		public String toString() { return id + "," + word + "," + from + "," + distance + "," + visited; }
+	}
 
-		path.add(src);
-		for(int i : map.get(src)) {
-			if(i > dest) break;
-			getmin(i, dest, map, path);
-		}
+	// min pq by distance
+	private static Node shortest(int src, int dest, Node[] nodes) {
+		PriorityQueue<Node> pq = new PriorityQueue<Node>();
+		nodes[src].visited = true; nodes[src].distance = 0;
+		pq.add(nodes[src]);
+
+		while(pq.peek() != null) {
+			Node node = pq.poll();
+			if(node.id == dest) return node;
+
+			for(int i : node.list) {
+				if(nodes[i].visited) continue;
+				nodes[i].from = node.id; nodes[i].visited = true; nodes[i].distance = nodes[src].distance + 1;
+				pq.add(nodes[i]);
+			}
+		} 
+		return null;
 	}
 
 	private static boolean doublet(String s1, String s2) {
@@ -26,12 +40,11 @@ public class Doublets {
 		return diff == 1;
 	}
 
-	// build index of all doublets ~ n^2
 	private static Map<Integer, List<Integer>> getmap(List<String> dict) {
 		Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
 		for(int i=0; i<dict.size(); i++) {
 			List<Integer> list = new ArrayList<Integer>();
-			for(int j=i+1; j<dict.size(); j++) if(doublet(dict.get(i), dict.get(j))) list.add(j);
+			for(int j=0; j<dict.size(); j++) if(i != j && doublet(dict.get(i), dict.get(j))) list.add(j);
 			map.put(i, list);
 		}
 		return map;
@@ -49,12 +62,22 @@ public class Doublets {
 			String line = s.nextLine(); if("".equals(line)) break;
 			dict.add(line);
 		}
+		Map<Integer, List<Integer>> map = getmap(dict);
 
 		while(s.hasNext()) {
-			Doublets d = new Doublets();
-			d.getmin(find(s.next(), dict), find(s.next(), dict), getmap(dict), new ArrayList<Integer>());
-			if(d.minPath == null) System.out.println("No solution");
-			else for(int i : d.minPath) System.out.println(dict.get(i)); 
+			Node[] nodes = new Node[dict.size()];
+			for(int i=0; i<nodes.length; i++) { nodes[i] = new Node(i, dict.get(i), map.get(i)); }
+
+			int src = find(s.next(), dict), dest = find(s.next(), dict);
+			Node node = shortest(src, dest, nodes);
+
+			if(node == null) System.out.println("No solution");
+			else { 
+				LinkedList<String> stack = new LinkedList<String>();
+				while(node.from >= 0) { stack.addFirst(node.word); node = nodes[node.from]; }
+				stack.addFirst(dict.get(src));
+				for(String word : stack) System.out.println(word);
+			} 
 
 			if(s.hasNext()) System.out.println();
 		}
