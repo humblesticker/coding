@@ -1,31 +1,19 @@
 import java.util.*;
 
 public class Doublets {
-	static class Node implements Comparable<Node> {
-		int id;
-		String word; 
-		int from = -1; 
-		int distance = Integer.MAX_VALUE; 
-		boolean visited = false;
-		List<Integer> list = null;
-
-		Node(int i, String w, List<Integer> l) { id = i; word = w; list = l; }
-		public int compareTo(Node other) { return Integer.compare(distance, other.distance); }
-		public String toString() { return from + "|" + distance + "|" + visited; }
+	static class Node {
+		int id; int from = -1; boolean visited = false;
+		Node(int i) { id = i; }
 	}
 
-	// BFS
-	private static void shortest(int src, Node[] nodes) {
+	private static void shortest(int src, Node[] nodes, Map<Integer, List<Integer>> map) {
 		LinkedList<Node> queue = new LinkedList<Node>();
-		nodes[src].visited = true; nodes[src].distance = 0;
-		queue.addLast(nodes[src]);
+		nodes[src].visited = true; queue.addLast(nodes[src]);
 
 		while(queue.size() > 0) {
 			Node node = queue.removeFirst();
-			for(int i : node.list) {
-				if(node.distance + 1 < nodes[i].distance) { nodes[i].from = node.id; nodes[i].distance = node.distance + 1; }
-				if(!nodes[i].visited) { nodes[i].visited = true; queue.addLast(nodes[i]); }
-			}
+			for(int i : map.get(node.id)) 
+				if(!nodes[i].visited) { nodes[i].from = node.id; nodes[i].visited = true; queue.addLast(nodes[i]); }
 		} 
 	}
 
@@ -48,8 +36,7 @@ public class Doublets {
 
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
-		List<String> dict = new ArrayList<String>();
-		Map<String, Integer> dictMap = new HashMap<String, Integer>();
+		List<String> dict = new ArrayList<String>(); Map<String, Integer> dictMap = new HashMap<String, Integer>();
 		int index = 0;
 		while(s.hasNextLine()) {
 			String line = s.nextLine(); if("".equals(line)) break;
@@ -59,15 +46,15 @@ public class Doublets {
 
 		while(s.hasNext()) {
 			Node[] nodes = new Node[dict.size()];
-			for(int i=0; i<nodes.length; i++) { nodes[i] = new Node(i, dict.get(i), map.get(i)); }
+			for(int i=0; i<nodes.length; i++) { nodes[i] = new Node(i); }
 
 			int src = dictMap.get(s.next()), dest = dictMap.get(s.next());
-			shortest(src, nodes);
+			shortest(src, nodes, map);
 
 			Node node = nodes[dest];
 			if(node.visited) {
 				LinkedList<String> stack = new LinkedList<String>();
-				while(node.from >= 0) { stack.addFirst(node.word); node = nodes[node.from]; }
+				while(node.from >= 0) { stack.addFirst(dict.get(node.id)); node = nodes[node.from]; }
 				stack.addFirst(dict.get(src));
 				for(String word : stack) System.out.println(word);
 			} else System.out.println("No solution.");
