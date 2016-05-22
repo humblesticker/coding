@@ -11,7 +11,7 @@ public class Doublets {
 
 		Node(int i, String w, List<Integer> l) { id = i; word = w; list = l; }
 		public int compareTo(Node other) { return Integer.compare(distance, other.distance); }
-		public String toString() { return id + "," + word + "," + from + "," + distance + "," + visited; }
+		public String toString() { return from + "|" + distance + "|" + visited; }
 	}
 
 	// min pq by distance
@@ -22,15 +22,18 @@ public class Doublets {
 
 		while(pq.peek() != null) {
 			Node node = pq.poll();
-			if(node.id == dest) return node;
+			//System.out.println(node);
 
 			for(int i : node.list) {
-				if(nodes[i].visited) continue;
-				nodes[i].from = node.id; nodes[i].visited = true; nodes[i].distance = nodes[src].distance + 1;
-				pq.add(nodes[i]);
+				if(node.distance + 1 < nodes[i].distance) { 
+					nodes[i].from = node.id; nodes[i].distance = node.distance + 1;
+				}
+				
+				if(!nodes[i].visited) { nodes[i].visited = true; pq.add(nodes[i]); }
 			}
+			//System.out.println(Arrays.toString(nodes));
 		} 
-		return null;
+		return nodes[dest];
 	}
 
 	private static boolean doublet(String s1, String s2) {
@@ -71,7 +74,7 @@ public class Doublets {
 			int src = find(s.next(), dict), dest = find(s.next(), dict);
 			Node node = shortest(src, dest, nodes);
 
-			if(node == null) System.out.println("No solution");
+			if(node.from < 0) System.out.println("No solution");
 			else { 
 				LinkedList<String> stack = new LinkedList<String>();
 				while(node.from >= 0) { stack.addFirst(node.word); node = nodes[node.from]; }
