@@ -14,73 +14,63 @@ public class Doublets {
 		public String toString() { return from + "|" + distance + "|" + visited; }
 	}
 
-	// min pq by distance
-	private static Node shortest(int src, int dest, Node[] nodes) {
-		PriorityQueue<Node> pq = new PriorityQueue<Node>();
+	// BFS
+	private static void shortest(int src, Node[] nodes) {
+		LinkedList<Node> queue = new LinkedList<Node>();
 		nodes[src].visited = true; nodes[src].distance = 0;
-		pq.add(nodes[src]);
+		queue.addLast(nodes[src]);
 
-		while(pq.peek() != null) {
-			Node node = pq.poll();
-			//System.out.println(node);
-
+		while(queue.size() > 0) {
+			Node node = queue.removeFirst();
 			for(int i : node.list) {
-				if(node.distance + 1 < nodes[i].distance) { 
-					nodes[i].from = node.id; nodes[i].distance = node.distance + 1;
-				}
-				
-				if(!nodes[i].visited) { nodes[i].visited = true; pq.add(nodes[i]); }
+				if(node.distance + 1 < nodes[i].distance) { nodes[i].from = node.id; nodes[i].distance = node.distance + 1; }
+				if(!nodes[i].visited) { nodes[i].visited = true; queue.addLast(nodes[i]); }
 			}
-			//System.out.println(Arrays.toString(nodes));
 		} 
-		return nodes[dest];
 	}
 
-	private static boolean doublet(String s1, String s2) {
-		if(s1.length() != s2.length()) return false;
-		int diff = 0;
-		for(int i=0; i<s1.length(); i++) if(s1.charAt(i) != s2.charAt(i)) diff++;
-		return diff == 1;
+	private static List<Integer> getDoublets(String s, Map<String, Integer> dictMap) {
+		List<Integer> list = new ArrayList<Integer>();
+		for(int i=0; i<s.length(); i++)
+			for(char c='a'; c<='z'; c++) {
+				if(c == s.charAt(i)) continue;
+				String find = s.substring(0, i) + c + s.substring(i+1);
+				if(dictMap.containsKey(find)) list.add(dictMap.get(find)); 
+			}
+		return list;
 	}
 
-	private static Map<Integer, List<Integer>> getmap(List<String> dict) {
+	private static Map<Integer, List<Integer>> getmap(List<String> dict, Map<String, Integer> dictMap) {
 		Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
-		for(int i=0; i<dict.size(); i++) {
-			List<Integer> list = new ArrayList<Integer>();
-			for(int j=0; j<dict.size(); j++) if(i != j && doublet(dict.get(i), dict.get(j))) list.add(j);
-			map.put(i, list);
-		}
+		for(int i=0; i<dict.size(); i++) map.put(i, getDoublets(dict.get(i), dictMap));
 		return map;
 	}	
-
-	private static int find(String s, List<String> list) {
-		for(int i=0; i<list.size(); i++) if(s.equals(list.get(i))) return i;
-		return -1;
-	}
 
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		List<String> dict = new ArrayList<String>();
+		Map<String, Integer> dictMap = new HashMap<String, Integer>();
+		int index = 0;
 		while(s.hasNextLine()) {
 			String line = s.nextLine(); if("".equals(line)) break;
-			dict.add(line);
+			dict.add(line); dictMap.put(line, index); index++;
 		}
-		Map<Integer, List<Integer>> map = getmap(dict);
+		Map<Integer, List<Integer>> map = getmap(dict, dictMap);
 
 		while(s.hasNext()) {
 			Node[] nodes = new Node[dict.size()];
 			for(int i=0; i<nodes.length; i++) { nodes[i] = new Node(i, dict.get(i), map.get(i)); }
 
-			int src = find(s.next(), dict), dest = find(s.next(), dict);
-			Node node = shortest(src, dest, nodes);
+			int src = dictMap.get(s.next()), dest = dictMap.get(s.next());
+			shortest(src, nodes);
 
-			if(node.from < 0) System.out.println("No solution");
-			else { 
+			Node node = nodes[dest];
+			if(node.visited) {
 				LinkedList<String> stack = new LinkedList<String>();
 				while(node.from >= 0) { stack.addFirst(node.word); node = nodes[node.from]; }
 				stack.addFirst(dict.get(src));
 				for(String word : stack) System.out.println(word);
-			} 
+			} else System.out.println("No solution.");
 
 			if(s.hasNext()) System.out.println();
 		}
