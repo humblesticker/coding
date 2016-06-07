@@ -8,17 +8,18 @@ public class CryptKicker2 {
 
 		char[] map = new char[26];
 		for(int i=0; i<KNOWN.length(); i++) {
-			char s = KNOWN.charAt(i), d = encrypted.charAt(i); 
-			if(s == ' ') if(d == ' ') continue; else return null;
+			char d = KNOWN.charAt(i), s = encrypted.charAt(i); 
+			if(s == ' ') { if(d == ' ') continue; else return null; }
 
-			char c = map[s-'a']; if(c == '\0') map[s-'a'] = d;
-			if(c != d) return null;
+			char c = map[s-'a']; 
+			if(c == '\0') map[s-'a'] = d;
+			else { if(c != d) return null; }
 		}
 		return map;
 	}
 
 	private static String decrypt(char[] a, char[] map) {
-		for(int i=0; i<a.length; i++) a[i] = map[a[i]-'a'];
+		for(int i=0; i<a.length; i++) if(a[i] != ' ') a[i] = map[a[i]-'a'];
 		return new String(a);
 	}
 
