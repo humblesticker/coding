@@ -2,30 +2,27 @@ import java.util.*;
 
 public class ExperimentalAnalyzer {
 	public int[] getPredictors(String[] data) {
-		String[][] grid = new String[data.length][];
-		for(int i=0; i<data.length; i++) grid[i] = data[i].split(" ");
-		
-		List<Integer> list = new ArrayList<Integer>();
-		for(int j=1; j<grid[0].length; j++) {
-			int min0 = Integer.MAX_VALUE, max0 = Integer.MIN_VALUE, min1 = min0, max1 = max0;
-			
-			for(int i=0; i<grid.length; i++) {
-				int num = Integer.parseInt(grid[i][j]);
-				if("0".equals(grid[i][0])) { min0 = Math.min(min0, num); max0 = Math.max(max0, num); }
-				else { min1 = Math.min(min1, num); max1 = Math.max(max1, num); }
+		int clen = data.split(" ").length;
+		int[][] max = new int[2][clen], min = new int[2][clen];
+		for(int i=0; i<2; i++) for(int j=0; j<clen; j++) { max[i][j] = -1; min[i][j] = -1; }
+
+		for(int i=0; i<grid.length; i++) {
+			String[] split = data.split(" ");
+			for(int j=1; j<split.length; j++) {
+				int pos = Integer.parseInt(split[0]), num = Integer.parseInt(split[j]);
+				if(max[pos][j] < 0 || num > max[pos][j]) max[pos][j] = num;
+				if(min[pos][j] < 0 || num < min[pos][j]) min[pos][j] = num;
 			}
-			
-			if(min0 == Integer.MAX_VALUE || min1 == Integer.MAX_VALUE || 
-				max0 == Integer.MIN_VALUE || max1 == Integer.MIN_VALUE) continue;
-			if(min0 > max1 || min1 > max0) list.add(j);
 		}
-		
+				
+		List<Integer> list = new ArrayList<Integer>();
+		for(int j=1; j<clen; j++) {
+			if(max[0][j] < 0 || max[1][j] < 0 || min[0][j] < 0 || min[1][j] < 0) continue;
+			if(min[0][j] > max[1][j] || min[1][j] > max[0][j]) list.add(j);
+		}
+
 		int[] nums = new int[list.size()];
 		for(int i=0; i<list.size(); i++) nums[i] = list.get(i);
 		return nums;		
 	}
 }
-/*
-no need to have an array, only min, max array for 0 and 1
-non-negative use -1 instead
- */
