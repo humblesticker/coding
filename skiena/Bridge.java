@@ -1,16 +1,19 @@
+/*
+sort
+if(len < 3) total = p[len-1], print element
+
+first = p[0], second = p[1] 
+total += second print first, second 
+
+if(len > )
+total += first print first
+
+*/
 import java.util.*;
 
 public class Bridge {
-	/*
-	if persons < 3 return sum
-	
-	choose 2 fastest (shuttler)
-	create max pq for rest --> pick 2 slowest 
-		if count <= 1 come back with fastest
-
-	add total time to the font after all processing
-	 */
-	private static List<String> cross(int[] persons) {
+	// print
+	private static void cross(int[] p) {
 
 	}
 
