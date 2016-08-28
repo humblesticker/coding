@@ -4,14 +4,9 @@ public class LongestK {
 	public List<String> get(int k, Iterator<String> input) {
 		PriorityQueue<String> minq = new PriorityQueue<String>((s1, s2) -> Integer.compare(s1.length(), s2.length()));
 		while(input.hasNext()) {
-			String cur = input.next();
-			if(minq.size() < k) minq.add(cur);
-			else if(cur.length() > minq.peek().length()) { minq.poll(); minq.add(cur); }
+			minq.add(input.next()); if(minq.size() > k) minq.poll();
 		}
-
-		List<String> list = new ArrayList<String>();
-		while(minq.size() > 0) list.add(minq.poll());
-		return list;
+		return new ArrayList<String>(minq);
 	}
 
 	public static void main(String[] args) {
