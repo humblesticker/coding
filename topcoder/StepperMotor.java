@@ -5,12 +5,6 @@ public class StepperMotor {
 		if(aa == ab) return Math.max(a, b);
 		return aa < ab ? a : b;
 	}
-
-	// rotation
-	int getmin(int c, int t, int n) {
-		int d = t - c; if(d < 0) d += n;
-		return less(d, d-n);
-	}
 	
 	// loop
 	public int rotateToNearest(int n, int c, int[] target) {
@@ -18,9 +12,11 @@ public class StepperMotor {
 		int min = Integer.MAX_VALUE;
 
 		for(int t : target) {
-			t %= n; if(t < 0) t += n;
+			t %= n; if(t < 0) t += n; 
 			if(c == t) return 0;
-			min = less(min, getmin(c, t, n));
+
+			int d = t - c; if(d < 0) d += n;
+			min = less(min, less(d, d-n));
 		}
 
 		return min; 
