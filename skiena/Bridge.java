@@ -1,30 +1,22 @@
-/*
-sort 
-
-1) first 2 <-- remove first 2 from right and addFirst to left
-2) frist 1 --> remove frist 1 from left and addFirst to right
-3) last 2 <-- remove last 2 from right and addlast to left
-4) first 1 --> remove frist 1 from left and addFirst to right
-
-after 1) and 3) check if right is empty. If empty done
-*/
 import java.util.*;
 
 public class Bridge {
 	LinkedList<Integer> left;
 	LinkedList<Integer> right;
 	int total = 0;
+	List<String> logs = new ArrayList<String>();
+	Bridge(LinkedList<Integer> l, LinkedList<Integer> r) { left = l; right = r; }
 
 	void first2toLeft() {
 		String log = ""; int max = Integer.MIN_VALUE;
 		for(int i=0; i<2 && right.size() > 0; i++) {
 			int p = right.removeFirst(); 
-			left.addFirst(p);
+			left.add(i, p);
 			max = Math.max(max, p);
 			log += (log.length() == 0 ? p : " " + p);
 		}
 		total += max;
-		System.out.println(log);
+		logs.add(log);
 	}
 
 	void last2toLeft() {
@@ -36,23 +28,28 @@ public class Bridge {
 			log += (log.length() == 0 ? p : " " + p);
 		}
 		total += max;
-		System.out.println(log);
+		logs.add(log);
 	}
 
-	void first1toRight() {
+	void first1toRight(int pos) {
 		int p = left.removeFirst(); 
-		right.addFirst(p);
+		right.add(pos, p);
 		total += p;
-		System.out.println(p);
+		logs.add("" + p);
 	}
 
 	void cross() {
+		if(right.size() == 0) return;
+
 		while(true) {
-			first2toLeft(left, right); if(right.size() == 0) break;
-			first1toRight(left, right);
-			last2toLeft(left, right); if(right.size() == 0) break;
-			first1toRight(left, right);
+			first2toLeft(); if(right.size() == 0) break;
+			first1toRight(0);
+			last2toLeft(); if(right.size() == 0) break;
+			first1toRight(1);
 		}
+
+		System.out.println(total);
+		for(String log : logs) System.out.println(log);
 	}
 
 	public static void main(String[] args) {
@@ -60,8 +57,12 @@ public class Bridge {
 		int T = Integer.parseInt(s.nextLine());
 		while(T > 0) {
 			s.nextLine();
-			int N = 
-			T--;
+			int N = Integer.parseInt(s.nextLine());
+			LinkedList<Integer> right = new LinkedList<Integer>();
+			for(int i=0; i<N; i++) right.addLast(Integer.parseInt(s.nextLine()));
+			Collections.sort(right);
+			(new Bridge(new LinkedList<Integer>(), right)).cross();
+			T--; if(T > 0) System.out.println();
 		}
 	}
 }
