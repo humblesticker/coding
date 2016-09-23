@@ -27,6 +27,6 @@ public class SPath {
 	}
 
 	public static void main(String[] args) {
-		(new SPath()).process();
+		(new SPath()).process();	
 	}
 }
