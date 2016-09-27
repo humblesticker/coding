@@ -14,7 +14,10 @@ public class Ball {
 
     // collision detection, wall and other balls
     public void move(double dt) {
-    	rx += vx*dt; ry += vy*dt;
+    	double x = rx + vx*dt, y = ry + vy*dt;
+    	if(x < radius || x > 1 - radius) vx = -vx; 
+    	if(y < radius || y > 1 - radius) vy = -vy;
+    	rx = x; ry = y;
     }
 
     public void draw() { StdDraw.filledCircle(rx, ry, radius);  }
