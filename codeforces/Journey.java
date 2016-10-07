@@ -1,9 +1,15 @@
 /*
-DFS with revisit ~ O(nm) instead of O(n + m)
-stop path if n is met or no where to go
+DFS: if meet n stop
+track, max hop taking less than T (with path)
+non-recursive DFS
+	using iterator (next())
+	removing node and adding all adjs: no tracing back possible
 
-from 
- */
+
+build adj list
+insert node 
+while(stack is not empty) 
+*/
 public class Journey {
 
 }
