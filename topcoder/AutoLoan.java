@@ -1,18 +1,18 @@
 public class AutoLoan {
-	public double interestRate(double p, double m, int t) {
-		double start = 0.0, end = 100.0, e = 10E-9;
-		while(end - start > e) {
-			double a = (start + end)/2, r = 1 + a/1200,
-				temp = t*Math.log(r) + Math.log(p*(1-r)/m + 1);
-			//System.out.println(a + "," + temp);
-			if(Math.abs(temp) < e) return a;
-			if(temp > 0) start = a; else end = a;
-		}
-		return -1.0; // NA;
+	double check(double p, double m, int t, double a) {
+		for(int i=0; i<t; i++) p += (p*a/1200 - m);
+		return p;
 	}
-
-	public static void main(String[] args) {
-		System.out.println(0.1 + 0.2);
-		System.out.println((new AutoLoan()).interestRate(6800.0, 680.0, 10));
+	
+	public double interestRate(double p, double m, int t) {
+		double start = 0.0, end = 100.0, e = 1E-12, mid = 0.0;
+		while((end - start)/start > e) {
+			mid = (end+start)/2;
+			double diff = check(p, m, t, mid);
+			//System.out.println(mid + "," + diff);
+			if(Math.abs(diff) < e) return mid;
+			if(diff < 0) start = mid; else end = mid;
+		}
+		return mid;
 	}
 }

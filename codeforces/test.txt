@@ -1,7 +1,3 @@
-5 5
-Abc
-abc
-ABC
-GCB
-DFG
-abc
+2
+R23C1000000
+BDWGN23
