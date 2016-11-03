@@ -28,13 +28,11 @@ public class BestYahtzeeScore {
 		return 0;
 	}
 	
-	void search(String chosen, int i, String rolls, int end) {
-		if(chosen.length() == 5) { max = Math.max(max, best(chosen)); return; }
-		if(i>=end) return;
+	
+	void check() {
 		
-		search(chosen + rolls.charAt(i), i+1, rolls, end - 2 + i/5);
-		search(chosen, i+1, rolls, end);
 	}
+	
 
 	public int bestScore(String rolls) {
 		search("", 0, rolls, rolls.length());
