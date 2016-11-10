@@ -14,10 +14,8 @@ public class ScheduleStrength {
 		for(int i=0; i<schedule.length(); i++) {
 			if(schedule.charAt(i) == '-') continue;
 
-			String result = results[i];
-			for(int j=0; j<result.length(); j++) {
-				char c = result.charAt(j);
-				if(j == team || c == '-') continue;
+			for(int j=0; j<results[i].length(); j++) {
+				char c = results[i].charAt(j); if(j == team || c == '-') continue;
 				t++; if(c == 'W') w++; 
 			}
 		}
@@ -27,6 +25,7 @@ public class ScheduleStrength {
 	public String[] calculate(String[] names, String[] results) {
 		Team[] teams = new Team[names.length];
 		for(int i=0; i<teams.length; i++) teams[i] = new Team(names[i], getWP(i, results));
+
 		Arrays.sort(teams);
 		return Arrays.stream(teams).map(t -> t.name).toArray(String[]::new);
 	}
