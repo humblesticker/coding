@@ -1,9 +1,25 @@
 /*
+-2, 4, 5, 6, -3, 4
+
+brute force
+	n^3, N^2 with n storage
+
+divide and conquer ? [ ]
+	nlogn
+
+
 DP
-	-2, 4, 5, 6, -3, 4
-	Sn = Max(Sn-1 + n, Sn-1) 
+	
+	Sn 
+		Sn-2 + In-1 + In
+		Sn-2
+		In
+
+		return largest element selected from recursive call
+		if not connected return 
 
 greedy
+	n
 
 
 */
