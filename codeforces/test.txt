@@ -1,6 +1,1 @@
-5
-andrew 5
-andrew 2
-mike 1
-mike 4
-andrew -2
+1000000000000000000
