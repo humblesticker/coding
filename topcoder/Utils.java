@@ -24,4 +24,8 @@ public class Utils {
             ++b;
         }
     }
+
+    boolean checkInt(double d) {
+        return (d % 1) == 0;
+    }
 }

@@ -1,10 +1,18 @@
+/*
+Fibonacci 
+*/
 import java.util.*;
 
 public class Tennis {
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
-		long n = s.nextLong(), cur = 2; int i = 1;
-		for(; i<=64 && cur<n; i++) cur *= 2;
-		System.out.println(i);
+		long n = s.nextLong(), wins = 1, prev = 1, current = 2;
+		while(current < n) {
+			long next = prev + current; 
+			prev = current; current = next;  wins++;
+		}
+
+		if(current == n) System.out.println(wins);
+		else System.out.println(wins-1);
 	}
 }
