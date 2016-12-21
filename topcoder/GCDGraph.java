@@ -1,26 +1,26 @@
-/*
-for n>k get smallest factor for x and y
-return lx*ly/gcd(lx,ly) <= n
-*/
+import java.util.*;
+
 public class GCDGraph {
 	private int gcd(int s, int l) {
-		while(l%s > 0) {
-			int r = l%s;
-			l = s; s = r;
-		}
+		while(l%s > 0) { int r = l%s; l = s; s = r; }
 		return s;
 	}
-	
-	private int least(int n, int x, int k) {
-		for(int i=k+1; i<=n; i++) 
-			if(x%i == 0) return i;
-		return -1; //NA
+
+	private List<Integer> factors(int n, int x, int k) {
+		List<Integer> list = new LinkedList<Integer>();
+		for(int i=k+1; i<=n; i++) if(gcd(i, x) > k)  list.add(i);
+		return list;
 	}
 	
 	public String possible(int n, int k, int x, int y) {
-		int lx = least(n, x, k), ly = least(n, y, k), gcd = gcd(lx, ly);
-		System.out.println(lx + "," + ly + "," + gcd);
-		if(lx > k && ly > k && lx*ly/gcd(lx, ly) <= n) return "Possible";
+		if(x == y) return "Possible";
+		List<Integer> list = factors(n, x, k);
+
+		for(int i=k+1; i<=n; i++) {
+			if(gcd(i, x) <= k) continue;
+			for(int j : list) if(gcd(i, j) > k) return "Possible";
+		}
+
 		return "Impossible";
 	}
-}
+}	
