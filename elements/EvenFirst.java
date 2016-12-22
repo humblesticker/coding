@@ -1,22 +1,16 @@
 /*
-odd index
-while i <= odd
-	if even continue
-	swap nums[odd] and nums[i] update odd
+track position to insert next even
 */
 import java.util.*;
 
 public class EvenFirst {
 	public static int[] process(int[] nums) {
-		int odd = nums.length-1, i = 0;
-		while(i < odd) {
-			if(nums[i]%2 == 0) i++;
-			else {
-				int temp = nums[odd]; nums[odd] = nums[i]; nums[i] = temp;
-				odd--;
+		int pos = 0;
+		for(int i=0; i<nums.length; i++) 
+			if(nums[i]%2 == 0) { 
+				int t = nums[pos]; nums[pos] = nums[i]; nums[i] = t;
+				pos++;
 			}
-		}
-		return nums;
 	}
 
 	public static void main(String[] args) {
