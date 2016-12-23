@@ -1,14 +1,3 @@
-/*
-fill from both ends
-track low, high
-~ O(n)
-	with O(n) space -- easy
-	inline -- tricky
-
-edge case
-	smallest
-	largest
-*/
 import java.util.*;
 
 public class DutchPartition {
