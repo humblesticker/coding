@@ -37,15 +37,18 @@ public class TwoEquations {
 		return "" + n;
 	}
 	
-	boolean no(int[] f, int[] s) {
-		if(f[0] == 0
+	boolean no(int[] f) {
+		return f[0] == 0 && f[1] == 0 && f[2] != 0;
 	}
 	
 	public String solve(String first, String second) {
 		int[] f = parse(first), s = parse(second);
 		int D = f[0]*s[1] - f[1]*s[0], Dx = f[2]*s[1] - f[1]*s[2], Dy = f[0]*s[2] - f[2]*s[0];
-		if(D == 0 && Dx == 0 && Dy == 0) return "MULTIPLE SOLUTIONS";
-		if(D == 0 || Dx == 0 || Dy == 0) return "NO SOLUTIONS"; 
+		if(no(f) || no(s)) return "NO SOLUTIONS";
+		if(D == 0) {
+			if(Dx == 0 && Dy == 0) return "MULTIPLE SOLUTIONS";
+			else return "NO SOLUTIONS"; 
+		}
 		
 		
 		int X1 = Dx, X2 = D, Y1 = Dy, Y2 = D, Gx = GCD(Dx, D), Gy = GCD(Dy, D);
