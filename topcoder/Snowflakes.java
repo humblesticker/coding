@@ -1,30 +1,23 @@
 public class Snowflakes {
-	void expand(int i, int j, char[][] square) {
-		int end = square.length - 1;
-		square[i][j] = '*';
-		square[i][end-j] = '*';
-		square[end-i][j] = '*';
-		square[end-i][end-j] = '*';
-	}
-	
+	boolean marked(int i, int j, String[] flakes) {
+		int len = flakes.length, end = 2*flakes.length-1;
+		if(i<len) i = end-i; if(j<len) j = end-j;
+		if(j > i) { int t = j; j = i; i = t; }
+		return flakes[i-len].charAt(j-len) == '*';
+	}	
+
 	public String[] flareOut(String[] flakes) {
-		int flen = flakes.length, len = 2 * flen; 
-		char[][] square = new char[len][len];
-		for(int i=0; i<len; i++) for(int j=0; j<len; j++) square[i][j] = '.';
-			
-		for(int i=0; i<flen; i++) for(int j=0; j<flakes[i].length(); j++) 
-			if(flakes[i].charAt(j) == '*') { 
-				expand(i+flen, j+flen, square); 
-				expand(j+flen, i+flen, square); 
-			}
-		
-		String[] out = new String[len];
-		for(int i=0; i<len; i++) out[i] = new String(square[i]);
+		String[] out = new String[2 * flakes.length];
+		for(int i=0; i<out.length; i++) {
+			out[i] = "";
+			for(int j=0; j<out.length; j++) out[i] += marked(i, j, flakes) ? '*' : '.';
+		}
 		return out;
 	}
 }
 /*
-1. expand tri to square
-2. tranform
-3. expand to whole
+1. for given i, j map that to flakes index
+	move to low, right quad and shift to up, left by len
+
+2. process all i, j 
 */
