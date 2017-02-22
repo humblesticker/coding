@@ -1,0 +1,21 @@
+example 
+	1 4 1 3
+	3 x 3 x 1 x 3 ~ 27 out of 81 total
+
+map restriction
+	create set
+	for each number
+		add to set 
+		if added x 3 % mod
+
+subsequence restriction
+	i from 0 to n-1
+	track A, B, C's min index
+	check if you are forced add A, B or C
+
+check
+	if A is not positioned yet and only 3 spaces left add A
+	if B is not positioned yet and only 2 
+	if C is not 1
+
+	

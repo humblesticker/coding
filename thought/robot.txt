@@ -1,0 +1,14 @@
+counter example
+
+always find the closest not connected
+is it possible that one connection affects other distance?
+what if distance is same?
+
+assume there is a better path than the closest. what happen?
+extreme examples
+all same
+2 clusters 
+triangle, square
+
+evaluation:
+	didn't understand pseudo code completely only endpoints can connected to maintain single path

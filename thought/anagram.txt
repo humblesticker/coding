@@ -1,0 +1,23 @@
+given a word and dictionary words
+get all possible words
+
+let me think
+you have dictionary so you can loop dictionary
+
+for each dictionary 
+	check dict is anagram of words
+
+check (w1, w2) -- calculating the given word again and again! pre calculate
+	count each character should all match
+	you can use hash table or array if character is a to z for example
+
+	so tally count
+	at the end compare ~ n
+
+overall ~ dict len * n (n is the largest word len + given word)
+
+
+
+after viewing video ( if you do this for many words yes you need to do this?)
+how about key for each word based on char, count info ~ n
+so you can only check these words against the given word

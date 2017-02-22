@@ -1,0 +1,22 @@
+count in
+
+max = 0, start = 0, end = 0
+sort by timestamp
+loop entry
+	if enter add count to in
+	else 
+		remove count from in 
+		update max with range
+
+// somehow you need to track max in with start and end
+// max range if 
+
+1, 1, I
+2, 1, E > 1 to 2 in 1
+
+sort(mMyClassVector.begin(), mMyClassVector.end(), 
+    [](const MyClass & a, const MyClass & b) -> bool
+{ 
+    return a.mProperty > b.mProperty; 
+});
+

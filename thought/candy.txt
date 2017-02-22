@@ -1,0 +1,66 @@
+understand
+	focus on core feeatures
+	dont be distracted by flapping wings
+
+find simpler problem
+	set up a base
+
+incrementally build
+	systemically trying different options
+
+
+what is the core here?
+	for now ignore min
+	find a path -- dfs
+
+
+you can explore all paths in m*n
+shortest path 
+	# no cost
+	. +1
+
+if # not on path >= cost of path there is path
+total # - count of # on the path! 
+you can stop if you are out of #
+
+
+##..
+..##
+
+....
+....
+
+####
+####
+
+##...
+.##..
+.....
+..##.
+#..##
+
+pseudo code
+
+get total #
+int dist[][] // intializes as -1
+
+entry 
+	dist, candies
+	i, j
+
+pq based on dist
+add item for 0, 0
+while (pq not mepty) {
+	item.pop, update dist[][]
+	item.dist >= 0 continue
+
+	if neighbor is # or candies < total add them into pq
+}
+return dist[m-1][n-1]
+
+
+
+
+
+
+

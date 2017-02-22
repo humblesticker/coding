@@ -1,0 +1,12 @@
+input?
+
+2x^2 + x + 6 > 4x + 1
+
+assume only one variable
+map<int, int> (exp, co)
+
+map out
+loop map
+	if(exp == 0) continue
+	map[exp - 1] = exp*co
+ 

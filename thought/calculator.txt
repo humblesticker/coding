@@ -1,0 +1,54 @@
+for blind
+differences from regular calculator? software
+requirements, need, why, environment? assuming you are talking to ba or producer :) 
+and you need to come up with design (as usual but in 30 min)
+target group?
+
+
+
+regular:
+	+, -, *, /
+	click button, display result
+
+blind
+	listen for input?
+	say result
+
+imagine bc on your computer
+blind start app somehow
+app should give some direciton to blind 
+
+mostly verbal communication 
+say add 7 and 16 for example
+result will be spoken
+
+
+calculatorForBlind
+	audioTool at
+	calculator cal
+
+	introduce
+		say add to add
+		say exit to exit....
+
+	execute(string) 
+		at.speak(cal.run(string))
+
+	// wait loop
+	listen() 
+		wait for blind to speak
+		if sound byte 
+			execute(at.interpret(sound))
+
+	feedback
+		progress so far?
+
+
+audioTool
+	string interpret(sound)
+	sound speak(string)
+
+
+calculator
+	string run(string)
+	
