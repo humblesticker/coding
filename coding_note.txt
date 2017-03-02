@@ -1,0 +1,25 @@
+questions
+	engage
+	critical
+	clarify 
+	understand
+
+test cases
+	edge cases, small, large
+	good exaples
+
+problem solving 
+	familiarize/visualize with the problem through actual examples
+	slow thinking, systemic, structured.
+	unstuck with failure/simpler/dumber
+	incremental approach
+
+pseudo
+	analyze
+
+debug in brain
+	practice
+
+replace pseudo with actual code
+	verify again
+
