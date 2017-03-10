@@ -1,0 +1,11 @@
+slow but systemic, interactive
+
+question: 
+	what are you building? 
+	what context, why?
+
+design: 
+	start with simple, bf
+	come up with options, consider trade off
+	indentify bottleneck
+	incrementally improve

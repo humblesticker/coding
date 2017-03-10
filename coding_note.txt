@@ -1,24 +1,29 @@
 questions
-	engage
-	critical
-	clarify 
-	understand
+	same as actual task
+	you need to know what problem means (example "find ip addresses from string")
+		what do you mean? example? string length? possible character? context?
 
-test cases
-	edge cases, small, large
-	good exaples
+	base test cases
+
 
 problem solving 
 	familiarize/visualize with the problem through actual examples
 	slow thinking, systemic, structured.
+		try all data structures
+		try 1, logn, n, n^2 so on
+		analyze what is expensive and what is not
+
 	unstuck with failure/simpler/dumber
 	incremental approach
+
 
 pseudo
 	analyze
 
+
 debug in brain
 	practice
+
 
 replace pseudo with actual code
 	verify again
