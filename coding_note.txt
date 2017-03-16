@@ -1,30 +1,20 @@
-questions
-	same as actual task
-	you need to know what problem means (example "find ip addresses from string")
-		what do you mean? example? string length? possible character? context?
+slow down
 
-	base test cases
+1. understand
+	question, test cases
 
+2. solve
+	pseudo code
+	systemically try all options
+	think slow, verify all steps
 
-problem solving 
-	familiarize/visualize with the problem through actual examples
-	slow thinking, systemic, structured.
-		try all data structures
-		try 1, logn, n, n^2 so on
-		analyze what is expensive and what is not
+	[stuck]
+	solve simple version
+	try BF
+	find problem and fix incrementally
 
-	unstuck with failure/simpler/dumber
-	incremental approach
+3. test/debug
+	verify solution against test cases
 
-
-pseudo
-	analyze
-
-
-debug in brain
-	practice
-
-
-replace pseudo with actual code
-	verify again
+4. implement
 
