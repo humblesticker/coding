@@ -5,8 +5,7 @@ std::ofstream cout("output.txt");
 
   
 int main() {
-    long a, b;
-    cin >> a >> b;
-    cout << a + b*b << std::endl;
+	int a, b; cin >> a;
+    for(int i=0; i<a; i++) b = a;
     return 0;
 }

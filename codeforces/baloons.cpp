@@ -3,46 +3,33 @@
 #include <iostream>
 using namespace std;
 
-// todo: simpler recursive ~ up to 2 x 10^5 is ok for recursive
 class baloons {
 public:
-	void color(vector<int>& colors, vector<vector<int>>& graph) {
-		int n = graph.size();
-		vector<int> parent(n); vector<bool> visited(n);
-		queue<int> q; colors[0] = 1; q.push(0); 
+	// dfs
+	void dfs(int parent, int current, vector<int>& colors, vector<vector<int>>& graph) {
+		int color = 1;
 
-		while(!q.empty()) {
-			int node = q.front();
-			auto children = graph[node];
+		for(auto child : graph[current]) {
+			if(colors[child] > 0) continue;
 
-			int num = 0;
-			for(auto child : children) {
-				if(visited[child]) continue;
-				parent[child] = node;
-				num = find(child, num+1, make_pair(colors[node], colors[parent[node]]), n); 
-				if(num < 0) break; 
+			while(color == colors[parent] || color == colors[current]) color++;
+			colors[child] = color++;
 
-				colors[child] = num;
-				q.push(child);
-			}
-			q.pop();
-			visited[node] = true;
+			dfs(current, child, colors, graph);
 		}
 	}
 };
 
 int main() {
-	int n, i, j; cin >> n; n++;
-	vector<vector<int>> graph(n);
-	for(int i=0; i<n-1; i++) {
-		cin >> i >> j; graph[i].push_back(j); graph[j].push_back(i);
-	}
+	int n, s, t; cin >> n;
+	vector<vector<int>> graph(n+1);
+	for(int i=0; i<n-1; i++) { cin >> s >> t; graph[s].push_back(t); graph[t].push_back(s); }
 
-	vector<int> colors(n);
-	baloons b(graph); b.color(colors, graph);
+	vector<int> colors(n+1); colors[1] = 1;
+	baloons b; b.dfs(0, 1, colors, graph);
 
 	int mcolor = 1;
 	for(auto c : colors) mcolor = max(mcolor, c); cout << mcolor << endl;
-	for(auto c : colors) cout << c << " "; cout << endl;
+	for(auto c : colors) if(c > 0) cout << c << " "; cout << endl;
 	return 0;
 }
