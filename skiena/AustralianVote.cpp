@@ -49,7 +49,7 @@ vector<int> getWinner(vector<vector<int>>& candidates, vector<queue<int>>& votes
     if(!dropped[i] || candidates[i].empty()) continue;
     
     for(auto& vi : candidates[i]) {
-      auto vote = votes[vi]; assert(vote.front() == i+1);
+      auto& vote = votes[vi]; assert(vote.front() == i+1);
       do vote.pop(); while(dropped[vote.front() - 1]);
       candidates[vote.front() - 1].push_back(vi);
     }
