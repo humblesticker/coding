@@ -1,78 +1,115 @@
+#include <iostream>
 #include <vector>
+#include <queue>
 #include <string>
 #include <algorithm>
-#include <iostream>
+#include <iterator>
 #include <sstream>
+#include <cassert>
 using namespace std;
 
-class AustralianVote {
-	int decided(vector<int>& counts, int vsize) {
-		int m = 0, mcount = 0, bcount = 0; 
-		for(auto c : counts) {
-			if(c <= 0) continue;
-			bcount++; 
+/*
+only move to active candidates
+track this separately 
 
-			if(c == m) mcount++; 
-			else if(c > m) { m = c; mcount = 1; }
-		}
-		return (2*m > vsize || mcount == bcount) ? m : -1;
-	}
+*/
+bool allTied(vector<vector<queue<int>>>&  candidates, int most) {
+  for(const auto& candidate : candidates) 
+    if(!candidate.empty() && candidate.size() != most) return false;
+  
+  return true;
+}
 
-	void winner(int max, vector<int>& counts, vector<string>& names) {
-		for(int i=0; i<counts.size(); i++) if(counts[i] == max) cout << names[i] << endl;
-	} 
+void print(vector<vector<queue<int>>>& candidates) {
+  cout << endl;
+  for(int i=0; i<candidates.size(); i++) 
+    for(auto vote : candidates[i]) {
+      cout << i+1 << ": ";
+      while(!vote.empty()) { cout << vote.front() << " "; vote.pop(); }
+      cout << endl;
+    }
+}
 
-	vector<int> loser(vector<int>& counts) {
-		int m = 2000; for(auto c : counts) if(c >= 0) m = min(m, c);
-		vector<int> cands; for(int i=0; i<counts.size(); i++) if(counts[i] == m) cands.push_back(i);
-		return cands;
-	}
+void print(vector<bool>& dropped) {
+  for(const auto& d : dropped) cout << d << " ";
+  cout << endl;
+}
 
-	int transfer(int cand, vector<int>& vote, vector<int>& counts) {
-		if(vote[cand] != 1) return -1;
+vector<int> getWinner(vector<vector<queue<int>>>& candidates, vector<bool>& dropped, int vcount) {
+  //print(candidates);
+  
+  int most = 0, least = vcount;
+  for(const auto& candidate : candidates) {
+    int count = candidate.size();
+    if(count == 0) continue;
+    most = max(most, count);
+    least = min(least, count);
+  }
+  //cout << most << "," << least << "," << vcount << endl;    
+  
+  if(most * 2 > vcount || allTied(candidates, most)) {
+    //cout << "winner decided:" << most << endl;
+    vector<int> winners;
+    for (int i=0; i<candidates.size(); i++) 
+      if(candidates[i].size() == most) winners.push_back(i);
+    return winners;
+  }
+  
+  for (int i=0; i<candidates.size(); i++)
+    if(candidates[i].size() == least) dropped[i] = true;
+  //print(dropped);
+    
+  // remove candidate with least votes and reset count
+  for (int i=0; i<candidates.size(); i++) {
+    if(!dropped[i]) continue;
+    
+    // move votes to next candidates
+    for(auto& vote : candidates[i]) {
+      assert(vote.front() == i+1);
+      do vote.pop();
+      while(dropped[vote.front() - 1]);
+      
+      //cout << "move " << i+1 << " to " << vote.front() << endl;
+      candidates[vote.front() - 1].push_back(vote);
+    }
+    candidates[i].clear();
+  }
+   
+  return getWinner(candidates, dropped, vcount);
+}
 
-		int lowest = 100, index = -1;
-		for(int i=0; i<counts.size(); i++) {
-			if(counts[i] < 0) continue;
-			if(vote[i] < lowest) { lowest = vote[i]; index = i; }
-		}
-		return index;
-	}
+// candidates 
+// vecotr<vector<queue<int>>>
+// candidate 1 with 5 votes (vote is 20 candidates in order)
+void process() {
+  int n; cin >> n; cin.ignore();
+  
+  vector<string> names;
+  vector<queue<int>> votes;
+  string line, choice;
+  while(n-- > 0) { getline(cin, line); names.push_back(line); }
+  
+  while(getline(cin, line) && !line.empty()) {
+    stringstream ss(line); queue<int> vote;
+    while(ss >> choice) vote.push(stoi(choice));
+    votes.push_back(vote);
+  }
 
-public:
-	void winner(vector<string>& names, vector<vector<int>>& votes) {
-		vector<int> counts(names.size());
-		for(auto& vote : votes) 
-			for(int i=0; i<votes.size(); i++) if(vote[i] == 1) { counts[i]++; break; }
-
-		int size = 0, vsize = votes.size();
-		while(size < names.size()) {
-			int max = decided(counts, vsize); if(max > 0) { winner(max, counts, names); break; }
-
-			vector<int> losers = loser(counts); 
-			for(auto l : losers) { counts[l] = -1; size++; }
-			for(auto l : losers) for(auto& vote : votes) { 
-				int t = transfer(l, vote, counts); if(t >= 0) counts[t]++; 
-			}
-		}
-	}
-};
+  // vote should not be empty 
+  // after max 18 iteration winner should be decided 
+  vector<vector<queue<int>>> candidates(names.size(), vector<queue<int>>());
+  for(const auto& vote : votes) {
+    assert(!vote.empty());
+    candidates[vote.front()-1].push_back(vote);
+  }
+  
+  vector<bool> dropped(names.size());
+  for(int w : getWinner(candidates, dropped, votes.size())) cout << names[w] << endl;
+}
 
 int main() {
-	int t, n, v; string s; getline(cin, s); istringstream ss(s); ss >> t; getline(cin, s); 
-	AustralianVote avote; 
-
-	while(t-- > 0) {
-		getline(cin, s); istringstream ss(s); ss >> n;
-		vector<string> names(n); for(int i=0; i<n; i++) getline(cin, names[i]);
-
-		vector<vector<int>> votes;
-	    while(getline(cin, s) && !s.empty()) {
-	    	istringstream ss(s); vector<int> vote(n); for(int i=0; i<n; i++) ss >> vote[i];
-	    	votes.push_back(vote);
-	    } 
-
-		avote.winner(names, votes); 
-		if(t > 0) cout << endl;
-	}
+    int t; cin >> t; cin.ignore();
+    string line; getline(cin, line); // remove blank line before
+    while(t-- > 0) { process(); if(t != 0) cout << endl; }
+    return 0;
 }
